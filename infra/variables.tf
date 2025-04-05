@@ -13,4 +13,7 @@ variable "artifact_registry_repository_name" {
   type = string
 }
 
-
+variable "cloudsql_instance_name" {
+  description = "Cloud SQLインスタンス名"
+  type = string
+}

@@ -16,3 +16,10 @@ module "secret_manager" {
     module.api,
   ]
 }
+
+module "cloud_sql" {
+  source = "./modules/cloud_sql"
+
+  region = var.region
+  cloudsql_instance_name = var.cloudsql_instance_name
+}
