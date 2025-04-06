@@ -9,3 +9,10 @@ resource "google_sql_database_instance" "main" {
 
   deletion_protection = true
 }
+
+resource "google_sql_database" "main" {
+  name = var.cloudsql_database_name
+  instance = google_sql_database_instance.main.name
+  charset  = "utf8mb4"
+  collation = "utf8mb4_unicode_ci" 
+}

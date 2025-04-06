@@ -22,4 +22,5 @@ module "cloud_sql" {
 
   region = var.region
   cloudsql_instance_name = var.cloudsql_instance_name
+  cloudsql_database_name = var.cloudsql_database_name
 }
