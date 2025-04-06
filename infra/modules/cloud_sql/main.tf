@@ -16,3 +16,10 @@ resource "google_sql_database" "main" {
   charset  = "utf8mb4"
   collation = "utf8mb4_unicode_ci" 
 }
+
+resource "google_sql_user" "cloudrun_iam_user" {
+  project = google_sql_database_instance.main.project
+  name     = var.cloud_run_sa_email 
+  instance = google_sql_database_instance.main.name
+  type     = "CLOUD_IAM_SERVICE_ACCOUNT" 
+}
