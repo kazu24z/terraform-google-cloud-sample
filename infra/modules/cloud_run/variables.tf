@@ -8,8 +8,8 @@ variable "region" {
   type = string
 }
 
-variable "artifact_registry_repository_name" {
-  description = "Artifact Registryリポジトリ名"
+variable "cloud_run_service_name" {
+  description = "Cloud Runサービス名"
   type = string
 }
 
@@ -18,17 +18,18 @@ variable "artifact_registry_image_name" {
   type = string
 }
 
-variable "cloud_run_service_name" {
-  description = "Cloud Runサービス名"
+variable "artifact_registry_repository_name" {
+  description = "Artifact Registryリポジトリ名"
   type = string
 }
 
-variable "cloudsql_instance_name" {
+variable "cloudsql_instance_connection_name" {
   description = "Cloud SQLインスタンス名"
   type = string
 }
 
-variable "cloudsql_database_name" {
-  description = "Cloud SQLデータベース名"
+variable "cloud_run_sa_email" {
+  description = "Cloud Runサービスアカウント名"
   type = string
 }
+
