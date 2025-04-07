@@ -33,3 +33,7 @@ variable "cloud_run_sa_email" {
   type = string
 }
 
+variable "secret_id" {
+  description = "Secret Manager ID"
+  type = string
+}

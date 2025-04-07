@@ -34,6 +34,16 @@ resource "google_cloud_run_v2_service" "app" {
         name       = "cloudsql"
         mount_path = "/cloudsql"
       }
+
+      env {
+          name = "DATABASE_URL"
+          value_source {
+            secret_key_ref {
+              secret = var.secret_id
+            version = "latest"
+          }
+        }
+      }
     }
     
   }
@@ -46,4 +56,48 @@ resource "google_cloud_run_v2_service_iam_binding" "public_access" {
   location = google_cloud_run_v2_service.app.location
   role     = "roles/run.invoker"
   members  = ["allUsers"]
+}
+
+# マイグレーションを実行するためのJob
+resource "google_cloud_run_v2_job" "db_migration" {
+  name     = "db-migration-job"
+  location = var.region
+  template {
+    template {
+      volumes {
+        name = "cloudsql"
+        cloud_sql_instance {
+          instances = [var.cloudsql_instance_connection_name]
+        }
+      }
+
+      containers {
+        image = "asia-northeast1-docker.pkg.dev/${var.project_id}/${var.artifact_registry_repository_name}/${var.artifact_registry_image_name}:latest"
+        
+        command = ["npx", "prisma", "migrate", "deploy"]
+        
+        resources {
+          limits = {
+            cpu    = "1"
+            memory = "512Mi"
+          }
+        }
+        env {
+          name = "DATABASE_URL"
+          value_source {
+            secret_key_ref {
+              secret = var.secret_id
+              version = "latest"
+            }
+          }
+        }
+        volume_mounts {
+          name       = "cloudsql"
+          mount_path = "/cloudsql"
+        }
+      }
+      
+      service_account = var.cloud_run_sa_email
+    }
+  }
 }

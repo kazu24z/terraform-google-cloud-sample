@@ -1,3 +1,4 @@
+data "google_project" "project" {}
 module "api" {
   source = "./modules/api"
 }
@@ -26,13 +27,24 @@ module "cloud_run" {
   cloudsql_instance_connection_name = module.cloud_sql.cloudsql_instance_connection_name
 
   cloud_run_sa_email = module.iam.cloud_run_sa_email
+  secret_id = module.secret_manager.secret_id
+}
+
+# 接続文字列を構築するためのローカル変数
+locals {
+    # mysql://cloudrun_app:<PASSSWORD>@localhost/<PROJECT_ID>?socket=/cloudsql/<CLOUD_SQL_INSTANCE_CONNECTION_NAME>
+    database_url = "mysql://${module.cloud_sql.sql_user_name}:${module.cloud_sql.sql_user_password}@localhost/${local.project_display_name}?socket=/cloudsql/${module.cloud_sql.cloudsql_instance_connection_name}"
+    project_display_name = data.google_project.project.name
 }
 
 module "secret_manager" {
   source = "./modules/secret_manager"
   
+  database_connection_string = local.database_url
+
   depends_on = [
     module.api,
+    module.cloud_sql
   ]
 }
 

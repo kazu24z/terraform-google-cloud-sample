@@ -21,9 +21,16 @@ resource "google_sql_database" "main" {
   collation = "utf8mb4_unicode_ci" 
 }
 
-resource "google_sql_user" "cloudrun_iam_user" {
+resource "random_password" "sql_user_password" {
+  length           = 16
+  special          = false
+}
+
+resource "google_sql_user" "cloudrun_app" {
   project = google_sql_database_instance.main.project
-  name     = var.cloud_run_sa_email 
+  name     = "cloudrun_app" 
+  host     = "%"
+  password = random_password.sql_user_password.result
   instance = google_sql_database_instance.main.name
-  type     = "CLOUD_IAM_SERVICE_ACCOUNT" 
+  type     = "BUILT_IN"
 }
