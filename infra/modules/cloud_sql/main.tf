@@ -5,10 +5,6 @@ resource "google_sql_database_instance" "main" {
   
   settings {
     tier = "db-custom-1-3840"
-    database_flags {
-      name  = "cloudsql_iam_authentication"
-      value = "on"
-    }
   }
 
   deletion_protection = true
