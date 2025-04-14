@@ -1,4 +1,5 @@
 project_id = "svelte-app-demo-455307"
+project_number = "731847597666"
 region = "asia-northeast1"
 artifact_registry_repository_name = "svelte-app-repo"
 artifact_registry_image_name = "svelte-app"

@@ -57,3 +57,11 @@ module "cloud_sql" {
   cloudsql_database_name = var.cloudsql_database_name
   cloud_run_sa_email = module.iam.cloud_run_sa_email
 }
+
+module "workload_identity" {
+  source = "./modules/workload_identity"
+
+  project_id = var.project_id
+  project_number = var.project_number
+  service_account = module.iam.github_actions_infra_sa
+}
