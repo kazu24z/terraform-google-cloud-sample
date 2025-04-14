@@ -7,6 +7,7 @@ module "iam" {
   source          = "./modules/iam"
   
   project_id      = var.project_id
+  terraform_state_bucket_name = var.terraform_state_bucket_name
 }
 
 module "artifact_registry" {

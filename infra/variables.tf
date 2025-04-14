@@ -32,3 +32,8 @@ variable "cloudsql_database_name" {
   description = "Cloud SQLデータベース名"
   type = string
 }
+
+variable "terraform_state_bucket_name" {
+  description = "Terraform State用バケット名"
+  type = string
+}
