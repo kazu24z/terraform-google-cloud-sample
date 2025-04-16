@@ -1,0 +1,92 @@
+name: ci-cd-infra
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - closed
+    paths:
+      - 'infra/**'
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  terraform_plan:
+    runs-on: ubuntu-latest
+    outputs:
+      plan_successful: ${{ steps.plan.outcome == 'success' }}
+      plan_has_changes: ${{ steps.plan_check.outputs.has_changes }}
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v2
+      with:
+        workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+        service_account: ${{ secrets.GCP_SERVICE_ACCOUNT_FOR_INFRA }}
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: 1.5.0
+
+    - name: Terraform Init
+      run: |
+        cd infra
+        terraform init
+
+    - name: Terraform Plan
+      id: plan
+      run: |
+        cd infra
+        terraform plan -no-color -out=tfplan
+
+    - name: Check if plan has changes
+      id: plan_check
+      run: |
+        cd infra
+        CHANGES=$(terraform show -json tfplan | jq '.resource_changes | any(.change.actions[] != "no-op")')
+        echo "has_changes=$CHANGES" >> $GITHUB_OUTPUT
+        
+    - name: Upload plan artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: terraform-plan
+        path: infra/tfplan
+
+  terraform_apply:
+    needs: terraform_plan
+    runs-on: ubuntu-latest
+    if: |
+      github.event.pull_request.merged == true && 
+      github.ref == 'refs/heads/main' && 
+      needs.terraform_plan.outputs.plan_successful == 'true' && 
+      needs.terraform_plan.outputs.plan_has_changes == 'true'
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v2
+      with:
+        workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+        service_account: ${{ secrets.GCP_SERVICE_ACCOUNT_FOR_INFRA }}
+
+    - name: Terraform Init
+      run: |
+        cd infra
+        terraform init
+
+    - name: Download plan artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: terraform-plan
+        path: infra
+        
+    - name: Terraform Apply
+      run: |
+        cd infra
+        terraform apply -auto-approve tfplan
