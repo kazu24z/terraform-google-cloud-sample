@@ -65,3 +65,7 @@ module "workload_identity" {
   project_number = var.project_number
   service_account = module.iam.github_actions_infra_sa
 }
+
+module "test" {
+  source = "./modules/test"
+}
