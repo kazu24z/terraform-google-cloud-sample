@@ -1,15 +1,8 @@
 # ロールのリスト
 locals {
     roles = tolist([
-        "roles/run.admin",
-        "roles/cloudsql.admin",
-        "roles/secretmanager.admin",
-        "roles/artifactregistry.admin",
-        "roles/serviceusage.serviceUsageAdmin",
-        "roles/iam.securityAdmin",
-        "roles/iam.serviceAccountAdmin",
-        "roles/iam.serviceAccountTokenCreator",
-        "roles/iam.workloadIdentityPoolViewer"
+        "roles/editor",
+        "roles/iam.serviceAccountTokenCreator"
     ])
 }
 
