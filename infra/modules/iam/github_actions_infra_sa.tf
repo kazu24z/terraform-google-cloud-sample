@@ -8,7 +8,8 @@ locals {
         "roles/serviceusage.serviceUsageAdmin",
         "roles/iam.securityAdmin",
         "roles/iam.serviceAccountAdmin",
-        "roles/iam.serviceAccountTokenCreator"
+        "roles/iam.serviceAccountTokenCreator",
+        "roles/iam.workloadIdentityPoolViewer"
     ])
 }
 
