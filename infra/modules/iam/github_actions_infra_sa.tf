@@ -7,7 +7,8 @@ locals {
         "roles/artifactregistry.admin",
         "roles/serviceusage.serviceUsageAdmin",
         "roles/iam.securityAdmin",
-        "roles/iam.serviceAccountAdmin"
+        "roles/iam.serviceAccountAdmin",
+        "roles/iam.serviceAccountTokenCreator"
     ])
 }
 
