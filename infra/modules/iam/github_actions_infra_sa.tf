@@ -2,7 +2,8 @@
 locals {
     roles = tolist([
         "roles/editor",
-        "roles/iam.serviceAccountTokenCreator"
+        "roles/iam.serviceAccountTokenCreator",
+        "roles/secretmanager.secretAccessor"
     ])
 }
 
