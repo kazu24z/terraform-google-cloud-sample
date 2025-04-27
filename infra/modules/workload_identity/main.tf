@@ -17,9 +17,7 @@ resource "google_iam_workload_identity_pool_provider" "main" {
   workload_identity_pool_provider_id = local.workload_identity_pool_provider_id
   display_name                       = "GitHub Provide"
   description                        = "GitHub Actions identity pool provider for automated test"
-  attribute_condition = <<EOT
-    attribute.repository == "${local.github_repo_name}"
-EOT
+  attribute_condition                = "assertion.repository == \"${local.github_repo_owner}/${local.github_repo_name}\""
   attribute_mapping = {
     "google.subject"       = "assertion.sub"
     "attribute.actor"      = "assertion.actor"
