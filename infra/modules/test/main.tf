@@ -1,5 +1,5 @@
 locals {
-  bucket_name_test = "test_bucket7"
+  bucket_name_test = "test_bucket8"
 }
 
 resource "google_storage_bucket" "terraform_state" {
