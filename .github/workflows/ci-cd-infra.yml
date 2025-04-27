@@ -48,9 +48,18 @@ jobs:
       id: plan_check
       run: |
         cd infra
-        CHANGES=$(terraform show -json tfplan | jq '.resource_changes | any(.change.actions[] != "no-op")')
-        echo "has_changes=$CHANGES" >> $GITHUB_OUTPUT
-        
+        if [ -f tfplan ]; then
+          terraform show -no-color tfplan > plan.txt
+          if grep -q "No changes" plan.txt; then
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          else
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          fi
+        else
+          echo "Plan file not found, assuming no changes"
+          echo "has_changes=false" >> $GITHUB_OUTPUT
+        fi
+
     - name: Upload plan artifact
       uses: actions/upload-artifact@v4
       with:
