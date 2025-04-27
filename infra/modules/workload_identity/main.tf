@@ -32,6 +32,6 @@ resource "google_iam_workload_identity_pool_provider" "main" {
 resource "google_service_account_iam_member" "workload_identity_user" {
   service_account_id = var.service_account.id
   role               = "roles/iam.workloadIdentityUser"
-  member             = "principalSet://iam.googleapis.com/projects/${var.project_number}/locations/global/workloadIdentityPools/${google_iam_workload_identity_pool.main.workload_identity_pool_id}/attribute.repository/${local.github_repo_name}"
+  member             = "principalSet://iam.googleapis.com/projects/${var.project_number}/locations/global/workloadIdentityPools/${google_iam_workload_identity_pool.main.workload_identity_pool_id}/attribute.repository/${local.github_repo_owner}/${local.github_repo_name}"
 }
 
