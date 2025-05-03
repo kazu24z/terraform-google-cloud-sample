@@ -7,6 +7,11 @@ module "iam" {
   source          = "./modules/iam"
   
   project_id      = var.project_id
+  region          = var.region
+  artifact_registry_repository_name = var.artifact_registry_repository_name 
+  cloud_run_service_name = var.cloud_run_service_name 
+  artifact_registry_image_name = var.artifact_registry_image_name 
+  cloudsql_instance_name = var.cloudsql_instance_name 
   terraform_state_bucket_name = var.terraform_state_bucket_name
 }
 
