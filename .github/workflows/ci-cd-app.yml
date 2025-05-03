@@ -33,7 +33,7 @@ jobs:
       uses: google-github-actions/auth@v2
       with:
         workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
-        service_account: ${{ secrets.GCP_SERVICE_ACCOUNT_FOR_APP}} # github actionsが使用するサービスアカウント
+        service_account: ${{ secrets.GCP_SERVICE_ACCOUNT_FOR_INFRA}} # github actionsが使用するサービスアカウント
 
     - name: Set up Cloud SDK # GitHub ActionsでGCPにアクセスするためのSDKをセットアップ
       uses: google-github-actions/setup-gcloud@v2
@@ -50,13 +50,13 @@ jobs:
         context: app/
         push: true
         tags: |
-          asia-northeast1-docker.pkg.dev/svelte-sample-451110/svelte-sample-repo/svelte-app:${{ github.event.pull_request.merge_commit_sha }}
-          asia-northeast1-docker.pkg.dev/svelte-sample-451110/svelte-sample-repo/svelte-app:latest
+          asia-northeast1-docker.pkg.dev/svelte-app-demo-455307/svelte-app-repo/svelte-app:${{ github.event.pull_request.merge_commit_sha }}
+          asia-northeast1-docker.pkg.dev/svelte-app-demo-455307/svelte-app-repo/svelte-app:latest
 
     - name: Deploy to Cloud Run # Cloud Runにデプロイ
       run: |
         gcloud run deploy svelte-sample \
-          --image=asia-northeast1-docker.pkg.dev/svelte-sample-451110/svelte-sample-repo/svelte-app:${{ github.event.pull_request.merge_commit_sha }} \
+          --image=asia-northeast1-docker.pkg.dev/svelte-app-demo-455307/svelte-app-repo/svelte-app:${{ github.event.pull_request.merge_commit_sha }} \
           --region=asia-northeast1 \
           --platform=managed \
           --port=8080 \
@@ -65,8 +65,8 @@ jobs:
           --max-instances=1 \
           --min-instances=0 \
           --allow-unauthenticated \
-          --service-account=cloud-run-sa@svelte-sample-451110.iam.gserviceaccount.com \
-          --add-cloudsql-instances=svelte-sample-451110:asia-northeast1:svelte-sample-zz \
+          --service-account=cloud-run-sa@svelte-app-demo-455307.iam.gserviceaccount.com \
+          --add-cloudsql-instances=svelte-app-demo-455307:asia-northeast1:svelte-app-demo-db \
           --set-secrets=DATABASE_URL=DATABASE_URL:latest
     
     - name: Run migrations if needed
