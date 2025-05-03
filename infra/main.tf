@@ -68,7 +68,8 @@ module "workload_identity" {
 
   project_id = var.project_id
   project_number = var.project_number
-  service_account = module.iam.github_actions_infra_sa
+  service_account_infra = module.iam.github_actions_infra_sa
+  service_account_app = module.iam.github_actions_app_sa
 }
 
 module "test" {

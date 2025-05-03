@@ -29,8 +29,14 @@ resource "google_iam_workload_identity_pool_provider" "main" {
   }
 }
 
-resource "google_service_account_iam_member" "workload_identity_user" {
-  service_account_id = var.service_account.id
+resource "google_service_account_iam_member" "workload_identity_user_infra" {
+  service_account_id = var.service_account_infra.id
+  role               = "roles/iam.workloadIdentityUser"
+  member             = "principalSet://iam.googleapis.com/projects/${var.project_number}/locations/global/workloadIdentityPools/${google_iam_workload_identity_pool.main.workload_identity_pool_id}/attribute.repository/${local.github_repo_owner}/${local.github_repo_name}"
+}
+
+resource "google_service_account_iam_member" "workload_identity_user_app" {
+  service_account_id = var.service_account_app.id
   role               = "roles/iam.workloadIdentityUser"
   member             = "principalSet://iam.googleapis.com/projects/${var.project_number}/locations/global/workloadIdentityPools/${google_iam_workload_identity_pool.main.workload_identity_pool_id}/attribute.repository/${local.github_repo_owner}/${local.github_repo_name}"
 }
