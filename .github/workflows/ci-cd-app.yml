@@ -50,13 +50,13 @@ jobs:
         context: app/
         push: true
         tags: |
-          asia-northeast1-docker.pkg.dev/svelte-app-demo-455307/svelte-app-repo/svelte-app${{ github.event.pull_request.merge_commit_sha }}
+          asia-northeast1-docker.pkg.dev/svelte-app-demo-455307/svelte-app-repo/svelte-app:${{ github.event.pull_request.merge_commit_sha }}
           asia-northeast1-docker.pkg.dev/svelte-app-demo-455307/svelte-app-repo/svelte-app:latest
 
     - name: Deploy to Cloud Run # Cloud Runにデプロイ
       run: |
         gcloud run deploy svelte-sample \
-          --image=asia-northeast1-docker.pkg.dev/svelte-app-demo-455307/svelte-app-repo/svelte-app${{ github.event.pull_request.merge_commit_sha }} \
+          --image=asia-northeast1-docker.pkg.dev/svelte-app-demo-455307/svelte-app-repo/svelte-app:${{ github.event.pull_request.merge_commit_sha }} \
           --region=asia-northeast1 \
           --platform=managed \
           --port=8080 \
