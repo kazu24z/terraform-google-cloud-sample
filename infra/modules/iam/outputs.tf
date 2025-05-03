@@ -5,3 +5,7 @@ output "cloud_run_sa_email" {
 output "github_actions_infra_sa" {
   value = google_service_account.github_actions_infra_sa
 }
+
+output "github_actions_app_sa" {
+  value = google_service_account.github_actions_app_sa
+}
