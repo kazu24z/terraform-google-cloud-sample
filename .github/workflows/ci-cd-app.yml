@@ -51,7 +51,7 @@ jobs:
         push: true
         tags: |
           asia-northeast1-docker.pkg.dev/svelte-app-demo-455307/svelte-app-repo/svelte-app${{ github.event.pull_request.merge_commit_sha }}
-          asia-northeast1-docker.pkg.dev/svelte-app-demo-455307/svelte-app-repo/svelte-applatest
+          asia-northeast1-docker.pkg.dev/svelte-app-demo-455307/svelte-app-repo/svelte-app:latest
 
     - name: Deploy to Cloud Run # Cloud Runにデプロイ
       run: |
@@ -66,7 +66,7 @@ jobs:
           --min-instances=0 \
           --allow-unauthenticated \
           --service-account=cloud-run-sa@svelte-app-demo-455307.iam.gserviceaccount.com \
-          --add-cloudsql-instances=svelte-app-demo-455307:asia-northeast1:svelte-sample-zz \
+          --add-cloudsql-instances=svelte-app-demo-455307:asia-northeast1:svelte-app-demo-db \
           --set-secrets=DATABASE_URL=DATABASE_URL:latest
     
     - name: Run migrations if needed
